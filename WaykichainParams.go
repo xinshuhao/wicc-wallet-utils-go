@@ -175,7 +175,7 @@ type CdpLiquidateTxParam struct {
 type Dest struct {
 	CoinSymbol string   //From Coin Type
 	CoinAmount uint64
-	DestAddr    string
+	DestUserId    string
 }
 
 type DestArr struct {

@@ -217,15 +217,23 @@ func ReadUCoinDestAddr(buf *bytes.Buffer,netType int) ([]DecodeUCoinTransferDest
 
 	for i:=0; i < int(size) ;i ++{
 		keyid_len := ReadVarInt(buf)
-		keyid := buf.Bytes()[:keyid_len]
-		address,err := GetAddrFrom20BytePubKeyHash(keyid,netType)
-		if err != nil {
-			return nil,err
+		userId:=""
+		if(keyid_len==20){
+			keyid := buf.Bytes()[:keyid_len]
+			address,err := GetAddrFrom20BytePubKeyHash(keyid,netType)
+			if err != nil {
+				return nil,err
+			}
+			buf.Next(int(keyid_len))
+			userId=address
+		}else {
+			height := ReadVarInt(buf)
+			index := ReadVarInt(buf)
+			userId= strconv.FormatInt(int64(height),10) + "-" + strconv.FormatInt(int64(index),10)
 		}
-		buf.Next(int(keyid_len))
 		coinSymbol := ReadString(buf)
 		transferAmount := ReadVarInt(buf)
-		dest := DecodeUCoinTransferDest{coinSymbol, transferAmount, address}
+		dest := DecodeUCoinTransferDest{coinSymbol, transferAmount, userId}
 		//dest:=Dest{string(commons.WICC),1000000, "wLKf2NqwtHk3BfzK5wMDfbKYN1SC3weyR4"}
 		dests  = append(dests,dest)
 	}

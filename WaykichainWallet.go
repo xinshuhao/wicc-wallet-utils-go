@@ -580,7 +580,7 @@ func SignUCoinTransferTx(privateKey string, param *UCoinTransferTxParam) (string
 	var dests []commons.Dest
 	for i:=0;i< len(param.Dests.destArray);i++{
 		var dest commons.Dest
-		dest.DestAddr = parseUserId(param.Dests.destArray[i].DestAddr)
+		dest.DestAddr = parseUserId(param.Dests.destArray[i].DestUserId)
 		if param.Dests.destArray[i].CoinAmount < 0 {
 			return "", ERR_RANGE_VALUES
 		}
